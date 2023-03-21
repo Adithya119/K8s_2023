@@ -1,0 +1,47 @@
+# we have 2 "nodeSelectorTerms", in which case, k8s will deploy if either 1 is satisfied. I checked that it deployed on - 
+# both worker nodes.
+
+# note that if you have the same "key" (ex: itrc-app), you can just include multiple values in the "values" field because - 
+# values is a list
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-affinity-1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: node-affinity-1
+  template:
+    metadata:
+      labels:
+        app: node-affinity-1
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:    # 1st rule
+              - key: disktype
+                operator: In
+                values:
+                - ssd             # this tag was on node-1
+            - matchExpressions:    # 2nd rule
+              - key: itrc-app
+                operator: In
+                values:
+                - steel-cloud-vm      # this tag was on node-2
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: app-group
+                operator: In
+                values:
+                - cog-non-prod
+      containers:
+      - name: node-affinity-1
+        image: nginx
+---

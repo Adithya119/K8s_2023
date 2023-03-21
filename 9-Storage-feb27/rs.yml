@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: mysql-pod
+  labels:
+    app: sql-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sql-db
+  template:
+    metadata:
+      labels:
+        app: sql-db
+    spec:
+      containers:
+        - name: mysqldb
+          image: mysql:8
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root123
+            - name: MYSQL_DATABASE
+              value: adithyadb
+            - name: MYSQL_USER
+              value: adithya
+            - name: MYSQL_PASSWORD
+              value: adithya123
+          
+          volumeMounts:
+            - name: mysql-volume
+              mountPath: "/var/lib/mysql"
+      
+      volumes:
+        - name: mysql-volume
+          persistentVolumeClaim: 
+            claimName: mysql-claim
+--- 
+
+
+#svc:
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+spec:
+  selector:              #matchLabels is not needed here
+    app: sql-db      # selecting the rs
+  type: LoadBalancer
+  ports:
+    - port: 3306
+      targetPort: 3306

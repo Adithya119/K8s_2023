@@ -1,0 +1,55 @@
+# env's defined in here
+
+# Deployment
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flask
+      env: non-prod
+  template:
+    metadata:
+      labels:
+        app: flask
+        env: non-prod
+    spec:
+      containers:
+      - name: flask
+        image: 592161164847.dkr.ecr.ap-south-1.amazonaws.com/flask:noenv
+        ports:
+        - containerPort: 8080
+
+        env:
+        - name: MYSQL_SERVER
+          value: mysql-svc
+        - name: MYSQL_DATABASE
+          value: adithyadb
+        - name: MYSQL_USER
+          value: adithya
+        - name: MYSQL_PASSWORD
+          value: adithya
+        - name: MYSQL_SERVER_PORT
+          value: "3306"                 # quotes required for integer values
+---
+
+
+# svc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-svc
+spec:
+  selector:
+    app: flask
+    env: non-prod
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    targetPort: 8080
+---

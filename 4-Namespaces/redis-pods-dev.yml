@@ -1,0 +1,43 @@
+# this is wrt to web-pods-dev.yml
+# k8s looks for existing pods with label "app=nginx-dev" within the "dev" namespace only. Hence, you should definitely -
+# namespace in the metadata field.
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-pods-dev
+  namespace: dev             # namespace given here. 
+spec:
+  replicas: 2    
+  selector:
+    matchLabels:
+      db: redis-dev
+  template:
+    metadata:
+      labels:
+        db: redis-dev
+    spec:
+      affinity:
+        podAffinity:  
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - nginx-dev
+            topologyKey: "kubernetes.io/hostname"
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: db
+                operator: In
+                values: 
+                - redis-dev
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: redis-dev
+        image: redis
+---

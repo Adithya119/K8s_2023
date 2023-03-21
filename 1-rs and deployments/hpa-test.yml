@@ -1,0 +1,10 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata: 
+  name: hpa-1
+spec:
+  minReplicas=4
+  maxReplicas=6
+  targetCPUUtilizationPercentage=60
+
+  # this is a trial

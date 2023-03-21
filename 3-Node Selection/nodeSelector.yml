@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeselector-1
+spec:
+  replicas: 2                    # the 2 replicas were deployed on a single node which was having this label: "disktype: ssd"
+  selector:
+    matchLabels:
+      app: test-nodeSelector
+  template:
+    metadata:
+      labels:
+        app: test-nodeSelector
+    spec:
+      containers:
+        - name: nodeselector-1
+          image: nginx
+      nodeSelector:
+        disktype: ssd     # this label was applied on 1 of the 2 worker nodes.
+          

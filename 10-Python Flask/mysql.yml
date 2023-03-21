@@ -1,0 +1,89 @@
+      #   Deployment    #      
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-db
+spec:              # deployment spec
+  replicas: 1
+  selector:      # selector shd match the labels which is inside template. that's why "matchLabels"
+    matchLabels:
+      db: mysql
+      env: non-prod
+  template:
+    metadata:
+      labels:
+        db: mysql
+        env: non-prod
+    spec:
+      containers:
+      - name: mysql
+        image: 592161164847.dkr.ecr.ap-south-1.amazonaws.com/mysql:8
+        ports:
+        - containerPort: 3306
+
+        env:
+        - name: MYSQL_DATABASE
+          value: adithyadb
+        - name: MYSQL_USER      # not USERNAME
+          value: adithya
+        - name: MYSQL_PASSWORD
+          value: adithya
+        - name: MYSQL_ROOT_PASSWORD
+          value: adithya119
+
+        volumeMounts:
+        - name: mysql-volume   
+          mountPath: "/var/lib/mysql"   # this path (dir) needs to be persisted => we need to mount a vol to this dir.
+
+      volumes:
+      - name: mysql-volume       # calling volumeMounts.name
+        persistentVolumeClaim:
+          claimName: mysql-pvc   # binding this path to persitent volume mentioned in pvc file below, by calling its name.
+---
+
+# "template" is the object that describes the pod(s) that will be created if insufficient replicas are detected.
+
+# "selector" is wrt Deployment. Selector is a label query over pods that should match the replica count. 
+#  Selector's keys and values must "match" the pod template's labels in order to be controlled by this Deployment.
+#  that's why under "selector", we write "matchLabels" which is matching the labels inside "template"
+
+
+     #   Service    #
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc    # this service can be called by this name. Cluster IP is none => Hence, the DB mentioned inside "selector" is exposed as an endpoint directly (no proxying needed) to whichever thing calls it.
+spec:
+  selector:       # no need to write labels or matchLabels here. Just "selector" is fine.
+    db: mysql
+    env: non-prod
+  ports:            # array 
+  - port: 3306
+  # targetPort: This field is ignored for services with clusterIP=None, and shd be omitted or set equal to the 'port' field. More info: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service
+  clusterIP: None      # check notes for theory
+---
+# refer 13th Feb Evening class notes for theory on ports. 
+
+# Also, refer Flow.PNG for full data flow.
+
+
+
+
+     #     pvc     #
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc            # this is called by pod's spec.volumes for binding /var/lib/sql to the storage volume
+                          # you can also give labels: db: mysql here for clarity
+spec:
+  resources:
+    requests:
+      storage: 1Gi
+    limits:
+      storage: 2Gi
+  accessModes:
+  - ReadWriteOnce
+---

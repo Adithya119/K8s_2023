@@ -1,0 +1,8 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-1
+spec:
+  maxReplicas: 4
+  minReplicas: 2
+  targetCPUUtilizationPercentage: 80   # target average CPU utilization (represented as a percentage of requested CPU) over all the pods

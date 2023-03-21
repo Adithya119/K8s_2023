@@ -1,0 +1,50 @@
+# Node affinity weight
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-affinity-weight
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: node-affinity-weight
+  template:
+    metadata:
+      labels:
+        app: node-affinity-weight
+    spec:
+      affinity:
+        nodeAffinity:             
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/os       # both worker nodes have this label
+                operator: In
+                values:                                 
+                - linux
+          preferredDuringSchedulingIgnoredDuringExecution:      # 2 rules with diff weights mentioned here
+          - weight: 1     
+            preference:
+              matchExpressions:
+              - key: itrc-app     
+                operator: In
+                values:                                 
+                - ccp-vm
+          - weight: 50     
+            preference:
+              matchExpressions:
+              - key: itrc-app    
+                operator: In
+                values:                                 
+                - steel-cloud-vm
+      containers:
+      - name: node-affinity-weight
+        image: nginx    
+
+---
+
+# both nodes have the "requiredDuringScheduling" label - 
+# but k8s deployed all 3 pods in the node which has "itrc-app:steel-cloud-vm" label because k8s kept score of all -
+# nodes & the node with this label has the highest score (because weight is 50)

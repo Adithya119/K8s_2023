@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: activity-1    # pods gets this name. Not "my-nginx" which you gave in container-spec
+spec:
+  containers:
+    - name: my-nginx
+      image: nginx:1.21
+      ports:
+        - containerPort: 80
+---

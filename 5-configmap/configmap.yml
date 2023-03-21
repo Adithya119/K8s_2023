@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data:                               # configuration data (env variables given here)
+  extra-param: extra-value
+  config.txt: |
+    JAVA_HOME = /var/log/java
+    app_name = qtcommerce
+---

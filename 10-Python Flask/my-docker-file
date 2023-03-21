@@ -1,0 +1,23 @@
+# step-1 of CI is to git clone the repo to the VM.
+# step-2:
+#   (i) cd to 'StudentCoursesRestAPI' directory, coz this dir has all app related files.
+#   (ii) run the docker image build command
+
+---
+FROM python:3.8-alpine3.15
+ADD . flask/
+ENV MYSQL_DATABASE='adithyadb'
+ENV MYSQL_USER='adithya'     
+ENV MYSQL_PASSWORD='adithya'
+ENV MYSQL_SERVER_PORT='3306'
+ENV MYSQL_SERVER='localhost'
+EXPOSE 8080
+WORKDIR flask
+RUN pip install -r requirements.txt
+ENTRYPOINT ["python","app.py"]
+---
+
+# ADD . flask/  ---> this command creates 'flask' dir inside the cont & copies all the contents of pwd ('StudentCoursesRestAPI') - 
+                      # of the VM to inside the 'flask' dir of the cont.
+
+# for ADD command, <dest> dir should have a trailing slash.

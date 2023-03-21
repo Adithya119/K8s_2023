@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-affinity-1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: node-affinity-1
+  template:
+    metadata:
+      labels:
+        app: node-affinity-1
+    spec:
+      affinity:       # affinity comes under pod spec
+        nodeAffinity:             # --->                                     # I'm using node affinity
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: itrc-app            # pods will be deployed in nodes with this label
+                operator: In       # Other operators: NotIn, Exists etc...
+                values:                                 # this is an array (of string values) as mentioned in api ref.
+                - ccp-vm
+          preferredDuringSchedulingIgnoredDuringExecution:     # this is an array (unlike the "requiredDuringScheduling") as mentioned in api ref.
+          - weight: 1     
+            preference:
+              matchExpressions:
+              - key: app-group
+                operator: In
+                values:                                 
+                - cog-non-prod
+      containers:
+      - name: node-affinity-1
+        image: nginx    
+
+---
+
+# "preferredDuringSchedulingIgnoredDuringExecution": (This field is optional)  The scheduler tries to find a node that 
+# has that label. If a matching node is not available, the scheduler still schedules the Pod.
+# ***********  This field just provides extra control over the deployment logic ***************

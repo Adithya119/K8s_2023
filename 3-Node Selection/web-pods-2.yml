@@ -1,0 +1,47 @@
+# db pods.
+
+# The scheduler must place the Pod on a node that has the label "kubernetes.io/hostname" & has atleast 1 pod with label -
+# app:nginx & it should deploy only 1 redis pod per node
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-pods
+spec:
+  replicas: 2    # <refer notes at bottom>
+  selector:
+    matchLabels:
+      db: redis
+  template:
+    metadata:
+      labels:
+        db: redis
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - nginx
+            topologyKey: "kubernetes.io/hostname"
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: db
+                operator: In
+                values: 
+                - redis
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: redis
+        image: redis
+---
+
+# I've see that if you don't give replicas, k8s is assuming the desired pods is 1 even though I have 2 nodes.
+# Hence, I have 2 replicas
+# I have given 3 replicas & observed that the 3rd pod is not "running" because the anti-affinity rule was kicking in (only 1 pod per node)

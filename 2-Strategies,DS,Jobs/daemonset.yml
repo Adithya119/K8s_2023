@@ -1,0 +1,26 @@
+# The whole point of DaemonSet is to have 1 pod across all nodes. Hence, you don't need to write replicas here. 
+# This doesn't require ports because we mostly use DS for background work (ex: logstash) which doesn't need exposing.
+# everything else is same as any other workload resource (ex: deployment)
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata: 
+  name: log-agent
+spec:
+  selector:
+    matchLabels:
+      app: logstash
+  template:
+    metadata:
+      labels:
+        app: logstash
+        version: v1
+    spec:
+      containers:
+        - name: logstash
+          image: alpine        # we used alpine image for simplicity. You can use logstash image.
+          args:   
+            - sleep
+            - 1d
+  

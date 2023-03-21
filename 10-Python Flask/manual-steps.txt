@@ -1,0 +1,8 @@
+sudo apt install python3-pip   #on the VM --> pre-req
+git clone https://github.com/DevProjectsForDevOps/StudentCoursesRestAPI.git
+cd StudentCoursesRestAPI
+pip install -r requirements.txt
+python3 app.py    #use python3 for manual steps ****  ---> this command keeps running
+
+steps 1,2,3 can be included inside job-1 of CI
+job-2 can have the docker image build command

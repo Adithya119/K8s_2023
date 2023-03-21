@@ -1,0 +1,81 @@
+# no change in this file because this yml already has env's defined.
+
+# Deployment
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-db
+spec:              
+  replicas: 1
+  selector:
+    matchLabels:
+      db: mysql
+      env: non-prod
+  template:
+    metadata:
+      labels:
+        db: mysql
+        env: non-prod
+    spec:
+      containers:
+      - name: mysql
+        image: 592161164847.dkr.ecr.ap-south-1.amazonaws.com/mysql:8
+        ports:
+        - containerPort: 3306
+
+        env:
+        - name: MYSQL_DATABASE
+          value: adithyadb
+        - name: MYSQL_USER 
+          value: adithya
+        - name: MYSQL_PASSWORD
+          value: adithya
+        - name: MYSQL_ROOT_PASSWORD
+          value: adithya119
+
+        volumeMounts:
+        - name: mysql-volume   
+          mountPath: "/var/lib/mysql"  
+
+      volumes:
+      - name: mysql-volume  
+        persistentVolumeClaim:
+          claimName: mysql-pvc  
+---
+
+
+
+
+# Service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+spec:
+  selector:
+    db: mysql
+    env: non-prod
+  ports:
+  - port: 3306
+  clusterIP: None
+---
+
+
+
+# pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  resources:
+    requests:
+      storage: 1Gi
+    limits:
+      storage: 2Gi
+  accessModes:
+  - ReadWriteOnce
+---

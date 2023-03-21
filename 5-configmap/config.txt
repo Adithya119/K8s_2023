@@ -1,0 +1,2 @@
+  JAVA_HOME = /var/log/java
+  app_name = qtcommerce

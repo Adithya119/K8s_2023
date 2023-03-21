@@ -1,0 +1,86 @@
+# deploying web pods --> affinity makes sure only one web pod per node
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: practice-1
+  namespace: prod      # deploying in prod namespace
+spec:
+  replicas: 2
+  minReadySeconds: 10
+  strategy:                
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: web
+      env: prod
+  template:
+    metadata:
+      labels:
+        app: web
+        env: prod
+    spec:
+      restartPolicy: Always    # this is default
+      
+      affinity:                
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:    # ***
+          - labelSelector:          #  "-" is required coz there's also topologyKey.
+              matchExpressions:
+              - key: app
+                operator: In   # operators start with Capital
+                values:
+                - web
+            topologyKey: "kubernetes.io/hostname"       # ***
+      
+      volumes:                 
+        name: mysql-volume         # "name" should match the "name" of template.spec.containers.volumeMounts
+        persistentVolumeClaim:
+          claimName: ###        # this should match the name of pvc (ex: mysql-claim)
+      
+      containers:
+      - name: web
+        image: ###
+        ports:
+        - containerPort: 3306
+        
+        env:               # only name needs to be in CAPS. Not values.
+        - name: USER
+          value: centos
+        - name: PRINCIPLE
+          value: ccp
+
+        livenessProbe:      # ***
+          httpGet:
+            path: /
+            port: 80    # port where app is accessible
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 15
+          failureThreshold: 5
+          successThreshold: 1     # defaults to 1
+
+        readinessProbe:     # ***   (same options as liveness probe - cross-checked with api ref page)
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 15
+          failureThreshold: 5
+          successThreshold: 1     # defaults to 1
+        
+        resources:
+          requests:
+            cpu: "0.5"
+            memory: "512Mi"
+          limits: 
+            cpu: "1"
+            memory: "1Gi"
+        
+        volumeMounts:             # this is for db pods only
+          name: mysql-volume            # "name" should match the "name" of template.spec.volumes
+          mountPath: "/var/lib/mysql"   

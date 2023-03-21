@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: script-2
+spec:
+  schedule: "*/2 * * * *"       # at every 2nd minute.
+  jobTemplate:                  # new field. Refer api ref page.
+    spec:
+      #selector:                       # selector has been deleted as we've been facing some error reg this field.
+        #matchLabels:
+          #script-name: script-2
+      template:
+        metadata:
+          labels:
+            script-name: script-2
+        spec:
+          containers:
+            - name: script-2
+              image: alpine
+              args:
+                - sleep
+                - 300s
+          restartPolicy: OnFailure

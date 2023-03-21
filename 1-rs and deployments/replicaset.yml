@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: replica-set         # no labels required here  ----- 1*
+spec:
+  replicas: 2
+  selector:                 # you can remember this at last & then write it here ------ 3*
+    matchLabels:
+      app: jenkins
+      env: prod
+      version: "2.334"
+  template:                 # this is the pod template, under which metadata & pod spec fall ------ 2*
+    metadata:
+      labels:
+        app: jenkins
+        env: prod
+        version: "2.334"
+    spec:
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:2.334-slim-jdk8
+          ports:
+            - containerPort: 8080      
+
+
+
+---
+
+# ----- 2* "template" is the object that describes the pod that will be created if insufficient replicas are detected.
+
+# ----- 3* "selector" is wrt replicaSet. Selector is a label query over pods that should match the replica count. Selector's keys and values must match the pod template's labels in order to be controlled by this replica set.
+

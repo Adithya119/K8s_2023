@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-affinity-dev
+  namespace: dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: node-affinity-dev
+  template:
+    metadata:
+      labels:
+        app: node-affinity-dev
+    spec:
+      affinity:
+        nodeAffinity:             
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: itrc-app            # pods will be deployed in nodes with this label
+                operator: In                # other operators: NotIn, Exists etc...
+                values:                                 
+                - ccp-vm        #Ip-107
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1     
+            preference:
+              matchExpressions:
+              - key: itrc-app
+                operator: In
+                values:                                 
+                - steel-cloud-vm
+      containers:
+      - name: node-affinity-dev
+        image: nginx    
+---

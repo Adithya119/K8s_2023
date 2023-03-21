@@ -1,0 +1,16 @@
+# this is a service to expose the app in replicaset-2.yml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rs-2-svc  
+spec:
+  selector:
+    labels:
+      app: jenkins
+      version: "1.651.2"
+  type: NodePort             # always remember to give this or else k8s selects the default "type" as ClusterIP which only exposes the app within the cluster.
+  ports:
+    - nodePort: 32002   # "-"  is required coz "ports" is an array
+      targetPort: 8080
+      port: 8080

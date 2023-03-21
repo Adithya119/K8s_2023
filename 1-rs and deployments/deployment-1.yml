@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: deploy-myapp     # You can name a microservice here
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: httpd                        # deleted the version label here as matcheLabels content is immutable.
+  template:                             # this is nothing but pod spec
+    metadata:
+      labels:
+        app: httpd
+        version: v1                     # -----> this is editable as v2, v3, .....
+      annotations:                       # annotations
+        kubernetes.io/change-cause: v1    # -----> this is editable as v2, v3, .....
+    spec:
+      containers:                       # this is the spec of container within the pod
+        - name: httpd
+          image: adithya119/httpd:v1    # -----> for rollouts, you can edit the image,  edit spec.template.metadata.labels.version,  spec.template.metadata.annotations & hit apply -f for a new rollout
+          ports:
+            - containerPort: 80         # default port for http
+
+
+
+# spec.selector.matchLabels is wrt to the "kind:Deployment"
+# spec.template is wrt the pods

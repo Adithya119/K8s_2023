@@ -1,0 +1,42 @@
+# creating web pods using anti-affinity rule to depoy 1 pod on each node.
+
+# The scheduler must place the Pod on a node that has the label "kubernetes.io/hostname" but does not have any pods with - 
+# label app:nginx on it.
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-pods
+spec:
+  replicas: 2    # <refer notes at bottom> 
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:        #  "-" is required coz there's also topologyKey.
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - nginx
+            #namespaces:    # array of namespaces or a single namespace can be given here.
+            topologyKey: "kubernetes.io/hostname"  # this is mandatory & doesn't take values like "kubernetes.io/hostname=<something>"  --> "=" is not accepted.
+      containers:
+      - name: web-pods
+        image: nginx
+---
+
+# I've see that if you don't give replicas, k8s is assuming the desired pods is 1 even though I have 2 nodes.
+# Hence, I have 2 replicas
+# I have given 3 replicas & observed that the 3rd pod is not "running" because the anti-affinity rule was kicking in (only 1 pod per node)
+
+# ex of "toplogyKey": node, az, region, etc. In this case, the scheduler must place the Pod on a node that has the label -
+# "kubernetes.io/hostname"

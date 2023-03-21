@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-demo
+  labels:
+    purpose: liveness
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.21
+      ports:
+        - containerPort: 80
+          protocol: TCP
+      livenessProbe:
+        httpGet:
+          path: /            # give some wrong path here to make the cont fail & observe the behavior
+          port: 80
+        initialDelaySeconds: 5   # remember this option because all other options have default values.
+        timeoutSeconds: 2
+        periodSeconds: 15
+        failureThreshold: 5
+---
+
+# Observations:
+# kubelet restarts the container every 75 seconds:-
+# k8s runs the probe every 15 secs (periodSecinds) & runs it for 5 times (failureThreshold) & marks is as unresponsive. -
+# After seeing that the cont is unresponsive, k8s restarts the container & this cycle goes on until k8s stops restarting - 
+# the cont (after 5 consecutive restarts) & changes the status of the cont as "CrashLoopBackoff" 

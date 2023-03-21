@@ -1,0 +1,38 @@
+# this yml is for informational pupose only
+# namespaceSelector was not working because of the reason mentioned at the bottom.
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-pods-dev-2
+spec:
+  replicas: 2   
+  selector:
+    matchLabels:
+      app: nginx-dev-2
+  template:
+    metadata:
+      labels:
+        app: nginx-dev-2
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - nginx-dev-2
+            namespaceSelector:          # namespace(s) given here. Refer notes at the bottom
+              matchLabels:
+                name: dev               # label of the "dev" namespace              
+            topologyKey: "kubernetes.io/hostname"  
+      containers:
+      - name: web-pods-dev-2
+        image: nginx
+---
+
+# "namespaceSelector:" 
+#      This field is alpha-level and is only honored when PodAffinityNamespaceSelector feature is enabled.
+#      may be this field wasn't enabled

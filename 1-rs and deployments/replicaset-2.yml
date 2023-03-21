@@ -1,0 +1,24 @@
+# this is same as replicaset.yml 
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rs-2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jenkins
+      version: 1.651.2      # it should be "1.651.2" but it did not throw error this time.
+  template:
+    metadata:
+      labels:            # metadata is wrt pod, not wrt container. That's why metadata & spec are given the same indentation.
+        app: jenkins
+        version: 1.651.2
+    spec:
+      containers:
+        - name: jenkins
+          image: jenkins:1.651.2
+          ports:
+            - containerPort: 8080
+    

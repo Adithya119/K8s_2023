@@ -1,0 +1,24 @@
+# you don't need replicas here, as per the api ref page
+# ports aren't needed because you aren't exposing anything. This is a script.
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: script-1
+spec:
+  #selector:                   # selector has been deleted as we've been facing some error reg this field.
+    #matchLabels:
+      #script-name: script-1
+  template:
+    metadata:
+      labels:
+        script-name: script-1
+    spec:
+      restartPolicy: OnFailure      # this was mandatory as mentioned in the error
+      containers:
+        - name: script-1
+          image: alpine     # choosen this image for simplicity. 
+          args:
+            - sleep         # you can call a script instead, that is already there in your image/container.
+            - 60s

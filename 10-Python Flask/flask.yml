@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flask
+      env: non-prod
+  template:
+    metadata:
+      labels:
+        app: flask
+        env: non-prod
+    spec:
+      containers:
+      - name: flask
+        image: 592161164847.dkr.ecr.ap-south-1.amazonaws.com/flask:latest
+        ports:
+        - containerPort: 8080    # this app runs on port 8080 (defined in app login)
+
+        env:
+        - name: MYSQL_SERVER
+          value: mysql-svc       # this is the name of mysql service. this is how app connects to DB.
+---
+
+
+# svc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-svc
+spec:
+  selector:
+    app: flask
+    env: non-prod
+  type: LoadBalancer   # spelling
+  ports:
+  - port: 8080
+    targetPort: 8080   # required?
+---

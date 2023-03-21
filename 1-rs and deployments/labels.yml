@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: labels-demo
+  labels:
+    app: wordpress
+    env: prod
+    version: 1.0.0
+spec:
+  containers:
+    - name: my-nginx
+      image: nginx:1.21
+      ports:
+        - containerPort: 80
+---

@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod-config
+spec:
+  containers:
+    - name: pod-config
+      image: alpine
+      command: 
+        - sleep
+        - 1d
+      
+      env:
+        - name: EXTRA-PARAM
+          valueFrom:
+            configMapKeyRef:
+              name: my-config     # calling the configmap.yml by its metadata
+              key: extra-param
+        - name: JAVA-HOME
+          valueFrom:
+            configMapKeyRef:
+              name: my-config     
+              key: JAVA_HOME
+        
+      volumeMounts:
+        - name: config-volume
+          mountPath: /config

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-alpine
+spec:
+  containers:
+    - name: alpine
+      image: alpine:3.12
+      command: ["sleep"]    ## important
+      args: ["1d"]

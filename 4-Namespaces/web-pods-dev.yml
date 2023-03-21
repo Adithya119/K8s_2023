@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-pods-dev
+  namespace: dev               # namespace give here
+spec:
+  replicas: 2   
+  selector:
+    matchLabels:
+      app: nginx-dev
+  template:
+    metadata:
+      labels:
+        app: nginx-dev
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - nginx-dev
+            #namespaces:                                      # this was not working
+            #- dev                                
+            topologyKey: "kubernetes.io/hostname"  
+      containers:
+      - name: web-pods-dev
+        image: nginx
+---
+# Use cases of namespaces:
+
+# As a cluster operator: 
+#     1) I want to support multiple user communities on a single cluster.
+#     2) I want to delegate authority to partitions of the cluster to trusted users in those communities.
+#     3) I want to limit the amount of resources each community can consume in order to limit the impact to other -
+#        communities using the cluster.
+#     4) I want to interact with resources that are pertinent to my user community in isolation of what other user -
+#        communities are doing on the cluster
