@@ -8,3 +8,9 @@ spec:
       image: alpine:3.12
       command: ["sleep"]    ## important
       args: ["1d"]
+
+
+# this can also be used:
+#       args: 
+#       - sleep
+#       - 1d
