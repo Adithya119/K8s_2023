@@ -8,12 +8,14 @@ spec:
   selector:
     labels:
       app: jenkins
-      version: "1.651.2"
+      version: "1.651.2"   # this is not an number nor an integer. That's why "" are needed.
   type: NodePort             # always remember to give this or else k8s selects the default "type" as ClusterIP which only exposes the app within the cluster.
   ports:
     - nodePort: 32002   # "-"  is required coz "ports" is an array
-      targetPort: 8080  # If this is not specified, the value of the 'port' field is used
+      targetPort: 8080  # If this is not specified, the value of the 'port' field is used. --> target port is container port
       port: 8080
+
+#  nodePort --> port --> targetPort   (traffic flows like this)
 
 # Notes:
 #  A service is a k8s object which in simple terms is a load balancer. 
