@@ -2,8 +2,12 @@ apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata: 
   name: hpa-1
+  labels:           # this is trial to see if this calls the pods created via replicaset.myl
+      app: jenkins
+      env: prod
+      version: "2.334"
 spec:
-  minReplicas=4
+  minReplicas=3
   maxReplicas=6
   targetCPUUtilizationPercentage=60
 
