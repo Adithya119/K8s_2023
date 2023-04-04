@@ -28,5 +28,6 @@ spec:
 
 # ----- 2* "template" is the object that describes the pod that will be created if insufficient replicas are detected.
 
-# ----- 3* "selector" is wrt replicaSet. Selector is a label query over pods that should match the replica count. Selector's keys and values must match the pod template's labels in order to be controlled by this replica set.
+# ----- 3* "selector" is wrt replicaSet. Selector is a label query over it's pods. That's why -
+            # selector's key-value pairs must match the pod template's labels in order to be controlled by this replica set.
 
