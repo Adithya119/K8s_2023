@@ -12,5 +12,11 @@ spec:
   type: NodePort             # always remember to give this or else k8s selects the default "type" as ClusterIP which only exposes the app within the cluster.
   ports:
     - nodePort: 32002   # "-"  is required coz "ports" is an array
-      targetPort: 8080
+      targetPort: 8080  # If this is not specified, the value of the 'port' field is used
       port: 8080
+
+# Notes:
+#  A service is a k8s object which in simple terms is a load balancer. 
+#  The only thing service can do is group resources / select resources based on labels and give one interface for access.
+
+# type: LoadBalancer --> this way the service will be exposed via an external load balancer (if the cloud provider supports it)
