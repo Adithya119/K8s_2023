@@ -15,7 +15,10 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y   # -y
 sudo docker run hello-world
 docker --version
+sudo usermod -aG docker ubuntu
 
+# exit & re-login for ubuntu user to be added to docker group (last command)
+# docker's cgroup should be changed to systemd after this
 
 
 # installed from --> https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
