@@ -4,4 +4,4 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 sh ./get-docker.sh
 sudo usermod -aG docker ubuntu
 
-# this script is working as of 6th Apr 2023
+# docker as cri is not working. Refer "install-containerd-k8s-notes.txt" instead.
