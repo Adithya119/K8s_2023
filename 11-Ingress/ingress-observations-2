@@ -1,0 +1,47 @@
+root@vrach20001 [ /etc/kubernetes ]# kubectl describe ingress provisioning -n prelude
+Name:             provisioning
+Namespace:        prelude
+Address:
+Default backend:  default-http-backend:80 (<error: endpoints "default-http-backend" not found>)
+Rules:
+ Host                             Path  Backends
+  ----                             ----  --------
+  vrach20.ch.xcloud.comcast.com
+                                   /provisioning   provisioning-service:8282 (10.244.0.146:8282,10.244.1.140:8282,10.244.2.141:8282)
+
+  *.vrach20.ch.xcloud.comcast.com
+                                   /provisioning   provisioning-service:8282 (10.244.0.146:8282,10.244.1.140:8282,10.244.2.141:8282)
+
+Annotations:                       meta.helm.sh/release-name: provisioning-service
+                                   meta.helm.sh/release-namespace: prelude
+Events:                            <none>
+
+
+# -------
+ 
+
+root@vrach20001 [ /etc/kubernetes ]# kubectl describe service provisioning-service -n prelude
+Name:              provisioning-service
+Namespace:         prelude
+Labels:            app=provisioning-service-app
+                   app.kubernetes.io/managed-by=Helm
+                   environment=new
+                   host-resolvable=true
+                   product=prelude
+                   service-monitor=provisioning-service
+Annotations:       ingress.kubernetes.io/use-k8s-service: true
+                   meta.helm.sh/release-name: provisioning-service
+                   meta.helm.sh/release-namespace: prelude
+Selector:          app=provisioning-service-app,environment=new,product=prelude
+Type:              ClusterIP
+IP Families:       <none>
+IP:                10.244.4.23
+IPs:               10.244.4.23
+Port:              provisioning-service-app-http  8282/TCP
+TargetPort:        8282/TCP
+Endpoints:         10.244.0.146:8282,10.244.1.140:8282,10.244.2.141:8282
+Port:              provisioning-service-remote-console  8484/TCP
+TargetPort:        8484/TCP
+Endpoints:         10.244.0.146:8484,10.244.1.140:8484,10.244.2.141:8484
+Session Affinity:  None
+Events:            <none>

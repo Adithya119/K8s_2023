@@ -1,0 +1,142 @@
+root@vrach20001 [ ~ ]# kubectl get deployments -n prelude | grep automation-ui-app
+automation-ui-app             3/3     3            3           258d
+
+root@vrach20001 [ ~ ]# kubectl get services -n prelude | grep automation-ui
+automation-ui           ClusterIP   10.244.6.114   <none>        80/TCP                       258d
+
+root@vrach20001 [ ~ ]# kubectl get ingresses -n prelude | grep automation-ui
+automation-ui                  <none>   vrach20.ch.xcloud.comcast.com,*.vrach20.ch.xcloud.comcast.com             80      258d
+automation-uiconfig.json       <none>   vrach20.ch.xcloud.comcast.com,*.vrach20.ch.xcloud.comcast.com             80      258d
+
+root@vrach20001 [ ~ ]# kubectl get endpoints -n prelude | grep automation-ui
+automation-ui                    10.244.0.142:80,10.244.1.139:80,10.244.2.135:80                         258d
+
+# ------------------------------
+
+ 
+root@vrach20001 [ ~ ]# kubectl describe deployment automation-ui-app -n prelude
+Name:               automation-ui-app
+Namespace:          prelude
+CreationTimestamp:  Wed, 20 Jul 2022 02:42:39 +0000
+Labels:             app.kubernetes.io/managed-by=Helm
+                    service-monitor=ui
+Annotations:        deployment.kubernetes.io/revision: 1
+                    meta.helm.sh/release-name: ui
+                    meta.helm.sh/release-namespace: prelude
+Selector:           app=automation-ui-app,environment=new,product=prelude
+Replicas:           3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:       Recreate
+MinReadySeconds:    0
+Pod Template:
+  Labels:  app=automation-ui-app
+           environment=new
+           product=prelude
+  Containers:
+   automation-ui-app:
+    Image:      nginx-httpd_private:latest
+    Port:       80/TCP
+    Host Port:  0/TCP
+    Liveness:   http-get [http://:80/k8s/liveness]http://:80/k8s/liveness delay=900s timeout=30s period=30s #success=1 #failure=3
+    Readiness:  http-get http
+            
+.
+.
+.
+.
+.
+
+# -------
+ 
+
+root@vrach20001 [ ~ ]# kubectl describe service automation-ui -n prelude
+Name:              automation-ui
+Namespace:         prelude
+Labels:            app=automation-ui-app
+                   app.kubernetes.io/managed-by=Helm
+                   environment=new
+                   product=prelude
+                   service-monitor=ui
+Annotations:       ingress.kubernetes.io/use-k8s-service: true
+                   meta.helm.sh/release-name: ui
+                   meta.helm.sh/release-namespace: prelude
+Selector:          app=automation-ui-app,environment=new,product=prelude
+Type:              ClusterIP
+IP Families:       <none>
+IP:                10.244.6.114
+IPs:               10.244.6.114
+Port:              automation-ui-app-http  80/TCP
+TargetPort:        80/TCP
+Endpoints:         10.244.0.142:80,10.244.1.139:80,10.244.2.135:80      # enpoints are nothing but pod's ip addresses
+Session Affinity:  None
+Events:            <none>
+ 
+
+# ---------
+
+https://vrach20.ch.xcloud.comcast.com/automation-ui/#/deployment-ui;ash=%2Fworkload%2Fdeployment
+
+
+ 
+root@vrach20001 [ ~ ]# kubectl describe ingress automation-ui -n prelude
+Name:             automation-ui       
+Namespace:        prelude
+Address:
+Default backend:  default-http-backend:80 (<error: endpoints "default-http-backend" not found>)
+Rules:
+  Host                             Path  Backends
+  ----                             ----  --------
+  vrach20.ch.xcloud.comcast.com
+                                   /automation-ui   automation-ui:80 (10.244.0.142:80,10.244.1.139:80,10.244.2.135:80)  # calling the service by it's name & port
+
+  *.vrach20.ch.xcloud.comcast.com
+                                   /automation-ui   automation-ui:80 (10.244.0.142:80,10.244.1.139:80,10.244.2.135:80)
+
+Annotations:                       meta.helm.sh/release-name: ui
+                                   meta.helm.sh/release-namespace: prelude
+Events:                            <none>
+ 
+
+
+# --------
+ 
+
+root@vrach20001 [ ~ ]# kubectl describe endpoints automation-ui -n prelude
+Name:         automation-ui
+Namespace:    prelude
+Labels:       app=automation-ui-app
+              app.kubernetes.io/managed-by=Helm
+              environment=new
+              product=prelude
+              service-monitor=ui
+Annotations:  <none>
+Subsets:
+  Addresses:          10.244.0.142,10.244.1.139,10.244.2.135     # enpoints are nothing but pod's ip addresses
+  NotReadyAddresses:  <none>
+  Ports:
+    Name                    Port  Protocol
+    ----                    ----  --------
+    automation-ui-app-http  80    TCP
+
+Events:  <none>
+ 
+
+# -------------------------------------
+
+ 
+root@vrach20001 [ ~ ]# kubectl get pods -n prelude -o wide | grep automation-ui
+NAME                                           READY   STATUS    RESTARTS   AGE    IP             NODE                               NOMINATED NODE   READINESS
+automation-ui-app-6784ffbdc7-2k48v             1/1     Running   0          259d   10.244.0.142   vrach20001.ch.xcloud.comcast.com   <none>           <none>
+automation-ui-app-6784ffbdc7-66g98             1/1     Running   0          259d   10.244.1.139   vrach20003.ch.xcloud.comcast.com   <none>           <none>
+automation-ui-app-6784ffbdc7-fzgbr             1/1     Running   0          259d   10.244.2.135   vrach20002.ch.xcloud.comcast.com   <none>           <none>
+
+ 
+
+# ----------------------------
+
+ 
+root@vrach20001 [ ~ ]# kubectl get service automation-ui -n prelude
+NAME            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+automation-ui   ClusterIP   10.244.6.114   <none>        80/TCP    259d
+
+# ----- 
+ 
