@@ -60,9 +60,9 @@ Annotations:       ingress.kubernetes.io/use-k8s-service: true
                    meta.helm.sh/release-name: ui
                    meta.helm.sh/release-namespace: prelude
 Selector:          app=automation-ui-app,environment=new,product=prelude
-Type:              ClusterIP
+Type:              ClusterIP      # nothing but the ip of the service. All pods pass through this ip to talk to each other.
 IP Families:       <none>
-IP:                10.244.6.114
+IP:                10.244.6.114     # this is the cluster ip
 IPs:               10.244.6.114
 Port:              automation-ui-app-http  80/TCP
 TargetPort:        80/TCP
