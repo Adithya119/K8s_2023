@@ -1,7 +1,7 @@
 # creating web pods using anti-affinity rule to depoy 1 pod on each node.
 
-# The scheduler must place the Pod on a node that has the label "kubernetes.io/hostname" but does not have any pods with - 
-# label app:nginx on it.
+# The scheduler will place pods on the nodes that must have the label "kubernetes.io/hostname" & k8s should deploy only 1 pod per node.
+# hence used the podAntiAffinity.
 
 ---
 apiVersion: apps/v1
@@ -32,6 +32,8 @@ spec:
       containers:
       - name: web-pods
         image: nginx
+        ports:
+        - containerPort: 80
 ---
 
 # I've see that if you don't give replicas, k8s is assuming the desired pods is 1 even though I have 2 nodes.

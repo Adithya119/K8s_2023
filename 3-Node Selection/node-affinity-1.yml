@@ -36,6 +36,7 @@ spec:
 
 ---
 
-# "preferredDuringSchedulingIgnoredDuringExecution": (This field is optional)  The scheduler tries to find a node that 
-# has that label. If a matching node is not available, the scheduler still schedules the Pod.
+# "preferredDuringSchedulingIgnoredDuringExecution": (This field is optional)  
 # ***********  This field just provides extra control over the deployment logic ***************
+
+# refer node-affinity-weight.yml for notes

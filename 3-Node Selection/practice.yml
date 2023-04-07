@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: automation-ui
+  namespace: ccp-vra-prod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: automation-ui-app
+      env: prod
+  template:
+    metadata:
+      app: automation-ui-app
+      env: prod
+      version: 1
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: vm-name-prefix
+                operator: In
+                values:
+                - vra
+          prefferedDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: for
+                operator: In
+                values:
+                - ccp-prod
+          - weight: 50
+            preference:
+              matchExpressions:
+              - key: for
+                operator: In
+                values:
+                - automation
+      containers:
+      - name: automation-ui
+        image: nginx-private:latest
+        ports:
+        - containerPort: 80
+      

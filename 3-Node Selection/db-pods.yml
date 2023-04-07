@@ -1,7 +1,7 @@
 # db pods.
 
-# The scheduler must place the Pod on a node that has the label "kubernetes.io/hostname" & has atleast 1 pod with label -
-# app:nginx & it should deploy only 1 redis pod per node
+# The scheduler will place 1 redis Pod per node if & only if that node has the label "kubernetes.io/hostname" & has atleast 1 pod - 
+# with label app:nginx in it.
 
 ---
 apiVersion: apps/v1
