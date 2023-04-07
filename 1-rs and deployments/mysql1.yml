@@ -19,3 +19,5 @@ spec:
         - name: MYSQL_PASSWORD
           value: adithya119
 ---
+
+# Service info is injected as env variables in all the pods to be created

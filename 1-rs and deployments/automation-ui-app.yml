@@ -37,7 +37,9 @@ spec:
     env: prod
   type: ClusterIP      # refer below
   ports:
-  - port: 80
+  - port: 80      # port --> service port;  targetPort: port to access on the pods targeted by the service. 
+#                                                       It will be looked up in the target Pod's container ports. 
+#                                                       If this is not specified, the value of the 'port' field is used by default.
 
 # "ClusterIP" means a service will only be accessible inside the cluster, via the cluster IP. Hence, we are exposing this service -
 # only to specific incoming requests using Ingress. This is LB'ing
