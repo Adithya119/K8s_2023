@@ -4,3 +4,10 @@ metadata:
   name: dev
   labels:
     name: dev
+
+# then run kubectl create -f dev-namespace.yml
+
+#       --------
+# Alternatively, you can create namespace using below command:
+
+#    kubectl create namespace <insert-namespace-name-here>

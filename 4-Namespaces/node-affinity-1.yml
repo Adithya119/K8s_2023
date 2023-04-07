@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: node-affinity-dev
-  namespace: dev
+  namespace: dev       # newly created dev namespace used here
 spec:
   replicas: 3
   selector:

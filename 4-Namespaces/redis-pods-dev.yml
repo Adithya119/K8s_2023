@@ -1,6 +1,6 @@
 # this is wrt to web-pods-dev.yml
 # k8s looks for existing pods with label "app=nginx-dev" within the "dev" namespace only. Hence, you should definitely -
-# namespace in the metadata field.
+# include namespace field in the metadata block.
 
 ---
 apiVersion: apps/v1
