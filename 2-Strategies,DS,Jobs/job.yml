@@ -20,5 +20,5 @@ spec:
         - name: script-1
           image: alpine     # choosen this image for simplicity. 
           args:
-            - sleep         # you can call a script instead, that is already there in your image/container.
+            - sleep         
             - 60s

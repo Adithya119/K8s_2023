@@ -13,7 +13,7 @@ metadata:
   name: app-2     
 spec:                       # this is deployment spec. & "strategy" is wrt to the Deployment. Therefore include "strategy" right under this spec.
   replicas: 4
-  minReadySeconds: 60        # this is added for v2 (new rollout)
+  minReadySeconds: 60        # no. of seconds before the pods are available for use by external traffic. Realtime, it's 0.
   selector:
     matchLabels:
       app: test-app-2
@@ -29,7 +29,7 @@ spec:                       # this is deployment spec. & "strategy" is wrt to th
         version: v2         # edited from v1 to v2 (new rollout)
     spec:
       containers:
-        - name: alpine  # wrongly named it alpine. It should be httpd. doesn't matter anyway
+        - name: httpd
           image: adithya119/httpd:v2      # edited from v1 to v2 (new rollout)
           ports:
             - containerPort: 80
