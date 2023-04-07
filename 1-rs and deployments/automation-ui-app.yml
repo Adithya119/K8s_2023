@@ -64,3 +64,8 @@ spec:
             port:
               number: 80
 ---
+
+# host: vrach20.ch.xcloud.comcast.com --> this is the apps DNS name. The app runs inside the pods on 3 nodes (1 pod per node). 
+# For upgrading the pods, we can do rolling updates.
+
+# but for upgrading cri ??
