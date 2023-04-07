@@ -35,10 +35,12 @@ spec:
   selector:
     app: automation-ui-app
     env: prod
-  type: ClusterIP      # 
+  type: ClusterIP      # refer below
   ports:
   - port: 80
 
+# "ClusterIP" means a service will only be accessible inside the cluster, via the cluster IP. Hence, we are exposing this service -
+# only to specific incoming requests using Ingress. This is LB'ing
 ---
 
 # ingress
@@ -47,12 +49,13 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: automation-ui-ingress   # you can give any name. Doesn't need to match service's name
+  namespace: ccp-vra-prod
 spec:
   defaultBackend:   # < give some index.html for 400 page not found >
-  rules:
-  - host: vrach20.ch.xcloud.comcast.com
-    http:
-      paths:
+  rules:             # array
+  - host: vrach20.ch.xcloud.comcast.com      # FQDN
+    http:           # HTTPIngressRuleValue is a list of http selectors pointing to backends.
+      paths:         # collection of paths    # array
       - path: /automation-ui
         pathType: Exact
         backend:
