@@ -10,3 +10,5 @@ spec:
     - nodePort: 32004
       port: 80
       targetPort: 80
+
+# inside selector, don't include version coz it might be immutable

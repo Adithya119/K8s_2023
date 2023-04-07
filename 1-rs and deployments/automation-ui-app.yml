@@ -32,7 +32,7 @@ metadata:
   name: automation-ui     # this is the service name & will be given to ingress
   namespace: ccp-vra-prod      # Ingress should be in the same namespace as this for LB'ing to happen
 spec:
-  selector:
+  selector:            # inside selector, don't include version coz it might be immutable
     app: automation-ui-app
     env: prod
   type: ClusterIP      # refer below
