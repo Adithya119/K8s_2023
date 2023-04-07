@@ -53,14 +53,14 @@ metadata:
 spec:
   defaultBackend:   # < give some index.html for 400 page not found >
   rules:             # array
-  - host: vrach20.ch.xcloud.comcast.com      # FQDN
+  - host: vrach20.ch.xcloud.comcast.com      # FQDN     # host & path determine the incoming traffic
     http:           # HTTPIngressRuleValue is a list of http selectors pointing to backends.
       paths:         # collection of paths    # array
       - path: /automation-ui
         pathType: Exact
-        backend:
-          service:
-            name: automation-ui
+        backend:                # Backend defines the referenced (service) endpoint to which the traffic will be routed to.
+          service:                # routing the traffic to desired service endpoint by it's name & port
+            name: automation-ui    
             port:
               number: 80
 ---
