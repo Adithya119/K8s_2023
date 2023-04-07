@@ -1,14 +1,18 @@
 root@vrach20001 [ ~ ]# kubectl get deployments -n prelude | grep automation-ui-app
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
 automation-ui-app             3/3     3            3           258d
 
 root@vrach20001 [ ~ ]# kubectl get services -n prelude | grep automation-ui
-automation-ui           ClusterIP   10.244.6.114   <none>        80/TCP                       258d
+NAME                    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)            AGE
+automation-ui           ClusterIP   10.244.6.114   <none>        80/TCP             258d
 
 root@vrach20001 [ ~ ]# kubectl get ingresses -n prelude | grep automation-ui
+NAME                           CLASS    HOSTS                                                           ADDRESS   PORTS   AGE
 automation-ui                  <none>   vrach20.ch.xcloud.comcast.com,*.vrach20.ch.xcloud.comcast.com             80      258d
 automation-uiconfig.json       <none>   vrach20.ch.xcloud.comcast.com,*.vrach20.ch.xcloud.comcast.com             80      258d
 
 root@vrach20001 [ ~ ]# kubectl get endpoints -n prelude | grep automation-ui
+NAME                             ENDPOINTS                                                               AGE
 automation-ui                    10.244.0.142:80,10.244.1.139:80,10.244.2.135:80                         258d
 
 # ------------------------------

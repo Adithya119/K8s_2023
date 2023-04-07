@@ -12,7 +12,7 @@ Rules:
   *.vrach20.ch.xcloud.comcast.com
                                    /provisioning   provisioning-service:8282 (10.244.0.146:8282,10.244.1.140:8282,10.244.2.141:8282)
 
-Annotations:                       meta.helm.sh/release-name: provisioning-service
+Annotations:                       meta.helm.sh/release-name: provisioning-service    # "release" denotes prod env; "snapshot" denotes dev env.
                                    meta.helm.sh/release-namespace: prelude
 Events:                            <none>
 

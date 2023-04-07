@@ -1,0 +1,63 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: automation-ui-app
+  namespace: ccp-vra-prod     # 
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: automation-ui-app
+      env: prod
+  template:
+    metadata:
+      labels:
+        app: automation-ui-app
+        env: prod
+        version: 1
+    spec:
+      containers:
+      - name: automation-ui-app
+        image: automation-ui-app:v1
+        ports:
+        - containerPort: 80
+---
+
+# svc
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: automation-ui     # this is the service name & will be given to ingress
+  namespace: ccp-vra-prod      # Ingress should be in the same namespace as this for LB'ing to happen
+spec:
+  selector:
+    app: automation-ui-app
+    env: prod
+  type: ClusterIP      # 
+  ports:
+  - port: 80
+
+---
+
+# ingress
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: automation-ui-ingress   # you can give any name. Doesn't need to match service's name
+spec:
+  defaultBackend:   # < give some index.html for 400 page not found >
+  rules:
+  - host: vrach20.ch.xcloud.comcast.com
+    http:
+      paths:
+      - path: /automation-ui
+        pathType: Exact
+        backend:
+          service:
+            name: automation-ui
+            port:
+              number: 80
+---

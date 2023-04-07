@@ -4,10 +4,10 @@ metadata:
   name: deploy-myapp     # You can name a microservice here
 spec:
   replicas: 3
-  selector:
+  selector:              # using selector, the deployment controls pods. That's why it uses matchLabels to match the pod's labels. 
     matchLabels:
-      app: httpd                        # deleted the version label here as matcheLabels content is immutable.
-  template:                             # this is nothing but pod spec
+      app: httpd                        # deleted the version label here as matchLabels content is immutable.
+  template:                             # this is pod template
     metadata:
       labels:
         app: httpd
