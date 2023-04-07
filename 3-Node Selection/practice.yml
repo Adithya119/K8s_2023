@@ -11,9 +11,10 @@ spec:
       env: prod
   template:
     metadata:
-      app: automation-ui-app
-      env: prod
-      version: 1
+      labels:
+        app: automation-ui-app
+        env: prod
+        version: 1
     spec:
       affinity:
         nodeAffinity:

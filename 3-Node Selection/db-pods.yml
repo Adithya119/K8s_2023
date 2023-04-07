@@ -23,7 +23,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-              - key: app
+              - key: app     # the label(s) given here should match the labels given in spec.template.metadata.labels of web-pods.yml file
                 operator: In
                 values:
                 - nginx
@@ -32,7 +32,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchExpressions:
-              - key: db
+              - key: db     # the label(s) given here should match the labels given in spec.template.metadata.labels of this file.
                 operator: In
                 values: 
                 - redis

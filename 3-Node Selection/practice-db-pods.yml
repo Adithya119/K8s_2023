@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: redis-pods
+  namespace: ccp-vra-prod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      db: redis
+      env: prod
+  template:
+    metadata:
+      labels:
+        db: redis
+        env: prod
+        verison: 1
+    spec:
+      affinity:
+        
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - automation-ui-app
+            topologyKey: "kubernetes.io/hostname"
+
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: db
+                operator: In
+                values:
+                - redis
+            topologyKey: "kubernetes.io/hostname"
+
+      containers:
+      - name: redis
+        image: redis-private:latest
+        ports:
+        - containerPort: 6379    # default port of redis

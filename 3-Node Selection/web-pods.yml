@@ -21,13 +21,12 @@ spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:        #  "-" is required coz there's also topologyKey.
+          - labelSelector:        #  "-" is required coz there's also topologyKey.  # in node-affinity yaml, here we have written nodeSelectorTerms. Rest all is the same except topologyKey.
               matchExpressions:
-              - key: app
+              - key: app         # the label(s) given here should match the labels given in spec.template.metadata.labels
                 operator: In
                 values:
                 - nginx
-            #namespaces:    # array of namespaces or a single namespace can be given here.
             topologyKey: "kubernetes.io/hostname"  # this is mandatory & doesn't take values like "kubernetes.io/hostname=<something>"  --> "=" is not accepted.
       containers:
       - name: web-pods

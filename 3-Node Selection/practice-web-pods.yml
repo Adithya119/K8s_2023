@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: automation-ui-app
+  namespace: ccp-vra-prod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: automation-ui-app
+      env: prod
+  template:
+    metadata:
+      labels:
+        app: automation-ui-app
+        env: prod
+        version: 1
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                Operator: In
+                values:
+                - automation-ui-app
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: automation-ui
+        image: nginx-private:latest
+        ports:
+        - containerPort: 80
