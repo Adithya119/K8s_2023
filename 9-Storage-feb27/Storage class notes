@@ -1,0 +1,19 @@
+NFS storage class:-
+# this storage class is responsible for dynamically "provisioning" has a PV on demand.
+# our storage class has a nfs provisioner that provides it's path for provisioning PVs for your k8s cluster.
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: logstash-nfs
+provisioner: cre-logstash-kibana.com/external-nfs   # name   # provisioner=provider      # nfs is external provisioner (means you have to build your own (ELK) server), unlike vsphere, aws-ebs, etc. which are k8s-provided provisioners.
+parameters:
+  server: cre-logstash-kibana.com
+  path: /share
+  readOnly: "false"
+
+
+# provisioner: Each StorageClass has a provisioner that determines what volume plugin is used for provisioning PVs.
+# server: Server is the hostname or IP address of the NFS server.
+# path: Path that is exported by the NFS server.
+# readOnly: A flag indicating whether the storage will be mounted as read only (default false).

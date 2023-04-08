@@ -54,7 +54,7 @@ metadata:
 spec:
   selector:              #matchLabels is not needed here
     app: sql-db      # selecting the rs
-  type: LoadBalancer
+  ClusterIP: none
   ports:
     - port: 3306
       targetPort: 3306
