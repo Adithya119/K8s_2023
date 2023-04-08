@@ -46,7 +46,7 @@ Next step is install K8s && after that execute the below mentioned commands to p
 
  sudo modprobe bridge
  echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf
- sysctl -p /etc/sysctl.conf
+ sudo sysctl -p /etc/sysctl.conf
  sudo modprobe br_netfilter
  sysctl -p /etc/sysctl.conf
  echo 1 > /proc/sys/net/ipv4/ip_forward   # do this as sudo -i
@@ -58,3 +58,5 @@ then do sudo -i && run "kubeadm init --pod-network-cidr=192.168.0.0/16"
 # note that with flannel overlay, I have seen errors & it's not working. Hence use Calico as yur overlay network:
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/tigera-operator.yaml
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/custom-resources.yaml
+
+# you can use "kubeadm reset" to restart the process of kubeadm init
