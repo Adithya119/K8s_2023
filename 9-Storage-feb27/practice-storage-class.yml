@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: StorageClass
+metadata:
+  name: ccp-nfs-2
+provisioner: cre-logstash-kibana.com/external-nfs   # type of provisioner
+parameters:
+  server: cre-logstash-kibana.com   # nfs server name
+  path: /for-ccp-nfs-2      # path that is exported by nfs server for pv
+  readOnly: "false"
+
+
+# SC provides external storage (pv) on-demand

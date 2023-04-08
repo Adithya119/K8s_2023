@@ -6,7 +6,7 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: ccp-nfs-1              # there will be many nfs shares in your org
-provisioner: cre-logstash-kibana.com/external-nfs   # name   # provisioner=provider      # nfs is external provisioner (means you have to build your own (ELK) server), unlike vsphere, aws-ebs, etc. which are k8s-provided provisioners.
+provisioner: cre-logstash-kibana.com/external-nfs   # type of provisioner   # provisioner=provider      # nfs is external provisioner (means you have to build your own (ELK) server), unlike vsphere, aws-ebs, etc. which are k8s-provided provisioners.
 parameters:
   server: cre-logstash-kibana.com    # you can also give ip
   path: /for-ccp-nfs-1     # this path is "exported" from the nfs server   # check nfs topic in your linux notebooks

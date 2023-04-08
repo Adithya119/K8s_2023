@@ -25,8 +25,8 @@ spec:
         - containerPort: 8080
 
         env:
-        - name: MYSQL_SERVER
-          value: mysql-svc
+        - name: MYSQL_SERVER 
+          value: mysql-svc     # gets access to db pods
         - name: MYSQL_DATABASE
           value: adithyadb
         - name: MYSQL_USER

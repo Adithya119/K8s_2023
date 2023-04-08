@@ -52,7 +52,7 @@ kind: Service
 metadata:
   name: mysql-svc
 spec:
-  selector:              #matchLabels is not needed here
+  selector:              # matchLabels is not needed here
     app: sql-db      # selecting the rs
   ClusterIP: none
   ports:

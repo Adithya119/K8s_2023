@@ -1,0 +1,86 @@
+# db's dont have http endpoint, they have tcp endpoint. Hence, for liveness & readiness probes, give tcpSocket instead of httpGet
+
+# pvc, rs & svc included here
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysqldb-volumeclaim     ## this name will be referenced later
+  namespace: ccp-vra-prod
+spec:
+  storageClass: ccp-nfs-2
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+    limits:          # might not be required as only 1 db pod can share the whole nfs exported path
+      storage: 10Gi
+
+---
+
+# rs
+
+apiVersion: v1
+kind: ReplicaSet
+metadata:
+  name: mysql-db
+  namespace: ccp-vra-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      db: mysql
+      env: prod
+  template:
+    metadata:
+      labels:
+        db: mysql
+        env: prod
+    spec:
+      containers:
+      - name: mysql-db
+        image: mysql-db-private:1
+        ports:
+        - containerPort: 3306
+
+        env:
+        - name: MYSQL_DATABASE
+          value: mysqldb
+        - name: MYSQL_USER
+          value: mystic
+        - name: MYSQL_PASSWORD
+          value: VMWare123!
+        - name: MYSQL_ROOT_PASSWORD
+          value: id!0tb0x!123
+
+        volumeMounts:
+        - name: mysql-volume
+          path: /var/lib/mysql     # you need to persist this path as mysql stores its data/logs here by default
+      
+      volumes:
+      - name: mysql-volume          # this name should match volumeMounts.name
+        persistentVolumeClaim:
+          claimName: mysqldb-volumeclaim      # referencing the pvc by it's name. This is how above mentioned cont path is persisted to external nfs server.
+
+---
+
+
+# svc for mysqldb
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqldb-svc   ##
+  namespace: ccp-vra-prod
+spec:
+  selector:
+    db: mysql
+    env: prod
+  type: ClusterIP   # this is the default value
+  ClusterIP: None    # always give "None" to any db svc so that the svc only exposes the db pod directly to some app 
+  ports:      # is this required when there is no ClusterIP in the 1st place ???
+  - port: 3306      # service port
+
+---

@@ -43,6 +43,7 @@ spec:
 
 # "ClusterIP" means a service will only be accessible inside the cluster, via the cluster IP. Hence, we are exposing this service -
 # only to specific incoming requests using Ingress. This is LB'ing
+
 ---
 
 # ingress

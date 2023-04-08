@@ -1,3 +1,0 @@
-# db's dont have http endpoint, they have tcp endpoint. Hence, for liveness & readiness probes, give tcpSocket instead of httpGet
----
-
