@@ -1,3 +1,11 @@
+# pvc is to persist data that's written into db by the app. It's not for logs. to persist logs, we have logstash configured as -
+# DaemonSet pod running one every node --> Deployment pods send logs to local-host --> local host sends to logstash pod --> which -
+# inturn sends to kibana.
+
+# k8s pod logs will be persisted to "logstash path" for our ops team for troubleshooting purpose
+# app data will be persisted to mysqldb for app team to look. App team may also use logstash for logs.
+
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata: 
@@ -7,7 +15,15 @@ spec:
     - ReadWriteOnce
   storageClassName: gp2     # I think this is not required
   resources:
-    requests:     # min value. Give "limits" for max value
+    requests:     
       storage: 1Gi
+    limits:
+      storage: 2Gi
+---
+
 
 # inside spec, remember only accessModes & resources
+
+# https://kubernetes.io/docs/concepts/storage/persistent-volumes/#types-of-persistent-volumes
+# many pv types are deprecated (aws ebs, azure disk, azure file etc.) - 
+# Hence, say that you use "nfs" as for creating pv's (ex:- https://kubernetes.io/docs/concepts/storage/volumes/#nfs)

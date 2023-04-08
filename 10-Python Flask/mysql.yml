@@ -54,7 +54,7 @@ spec:              # deployment spec
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-svc    # this service can be called by this name. Cluster IP is none => Hence, the DB mentioned inside "selector" is exposed as an endpoint directly (no proxying needed) to whichever thing calls it.
+  name: mysql-svc    # this service can be called by this name. flask app has been given this name via env. Cluster IP is none => Hence, mysql storage is exposed as an endpoint directly (no proxying needed) to flask application.
 spec:
   selector:       # no need to write labels or matchLabels here. Just "selector" is fine.
     db: mysql

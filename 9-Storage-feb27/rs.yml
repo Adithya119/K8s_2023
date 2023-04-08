@@ -1,6 +1,10 @@
+# 9-Storage-feb27 creates a 1 tier architechture --> this creates only db infra
+
+# 10-Python Flask uses this db, links it to flask app & creates a 2-tier architecture.
+
 ---
 apiVersion: apps/v1
-kind: ReplicaSet
+kind: ReplicaSet      # you can create Deployment, to support upgrades
 metadata:
   name: mysql-pod
   labels:
