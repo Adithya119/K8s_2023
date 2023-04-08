@@ -1,15 +1,15 @@
 NFS storage class:-
-# this storage class is responsible for dynamically "provisioning" has a PV on demand.
-# our storage class has a nfs provisioner that provides it's path for provisioning PVs for your k8s cluster.
+# we created this storage class which is responsible for dynamically "provisioning" a PV on demand.
+# our storage class has a nfs provisioner that provides it's share for provisioning PVs for your k8s cluster.
 
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: logstash-nfs
+  name: ccp-nfs-1              # there will be many nfs shares in your org
 provisioner: cre-logstash-kibana.com/external-nfs   # name   # provisioner=provider      # nfs is external provisioner (means you have to build your own (ELK) server), unlike vsphere, aws-ebs, etc. which are k8s-provided provisioners.
 parameters:
-  server: cre-logstash-kibana.com
-  path: /share
+  server: cre-logstash-kibana.com    # you can also give ip
+  path: /for-ccp-nfs-1     # this path is "exported" from the nfs server   # check nfs topic in your linux notebooks
   readOnly: "false"
 
 

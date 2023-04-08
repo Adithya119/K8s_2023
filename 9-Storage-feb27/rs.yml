@@ -4,13 +4,13 @@
 
 ---
 apiVersion: apps/v1
-kind: ReplicaSet      # you can create Deployment, to support upgrades
+kind: ReplicaSet      # scaling db is complicated, that's why selected rs instead of deployment
 metadata:
   name: mysql-pod
   labels:
     app: sql-db
 spec:
-  replicas: 1
+  replicas: 1    # only 1 replica coz this 1 pod takes up the entire node & accessMode for pv is set to ReadWriteOnce
   selector:
     matchLabels:
       app: sql-db

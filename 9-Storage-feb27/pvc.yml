@@ -21,7 +21,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce   # refer other options written at the bottom
-  storageClassName: gp2     # defaults to gp2    # you can give your nfs storageClassName: logstash-nfs
+  storageClassName: ccp-nfs-1     # defaults to gp2 in azure
   resources:
     requests:     
       storage: 1Gi
