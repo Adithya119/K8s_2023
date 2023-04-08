@@ -5,6 +5,11 @@ metadata:
   namespace: ccp-vra-prod
 spec:
   replicas: 3
+  strategy:
+    type: RollingUpdate
+      rollingUpdate:
+        maxUnavilable: 25%
+        maxSurge: 25%
   selector:
     matchLabels:
       app: automation-ui-app
@@ -15,6 +20,9 @@ spec:
         app: automation-ui-app
         env: prod
         version: 1
+      annotations:
+        kubernetes.io/change-cause: 1
+    
     spec:
       affinity:
         podAntiAffinity:
@@ -26,8 +34,37 @@ spec:
                 values:
                 - automation-ui-app
             topologyKey: "kubernetes.io/hostname"
+      
       containers:
       - name: automation-ui
         image: nginx-private:latest
         ports:
         - containerPort: 80
+              
+        livenessProbe:       #livenessProbe
+          httpGet:
+            path: /
+            port: 80
+          initiatlDelaySeconds: 5
+          periodSeconds: 15
+          failureThreshold: 3
+          timeoutSeconds: 2
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          periodSeconds: 10
+          failureThreshold: 3
+
+        resources:
+          requests:
+            cpu: 6
+            mem: "16Gi"
+          limits:
+            cpu: 8
+            mem: "24Gi"
+      
+      initContainers:
+      - name: init-1      # you can include multiple init-containers
+        image: init-for-nginx-private:latest

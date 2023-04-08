@@ -18,6 +18,6 @@ ENTRYPOINT ["python","app.py"]
 ---
 
 # ADD . flask/  ---> this command creates 'flask' dir inside the cont & copies all the contents of pwd ('StudentCoursesRestAPI') - 
-                      # of the VM to inside the 'flask' dir of the cont.
+#   of the VM to inside the 'flask' dir of the cont.
 
 # for ADD command, <dest> dir should have a trailing slash.
