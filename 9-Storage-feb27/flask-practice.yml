@@ -41,7 +41,7 @@ spec:
             secretKeyRef:
               name: db-credentials
               key: db-pass
-        - name: MYSQL_SERVER       # app connects to db directly by calling it's svc-name.     # we give db to app as a direct connection by injecting db's svc-name as env.
+        - name: MYSQL_SERVER       # app connects to db directly by calling it's svc-name.     # we give db as a direct connection to the app cont by injecting db's svc-name as env.
           value: mysqldb-svc 
 
         livenessProbe:
@@ -85,5 +85,5 @@ spec:
   ports:
   - port: 8080    # service port --> keep this same as pods container port
     targetPort: 8080
-    
+
 ---
