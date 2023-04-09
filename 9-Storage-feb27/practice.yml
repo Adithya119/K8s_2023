@@ -47,17 +47,29 @@ spec:
 
         env:
         - name: MYSQL_DATABASE
-          value: mysqldb
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials     # name of the referrant i.e, the name of the secret file.
+              key: db-name
         - name: MYSQL_USER
-          value: mystic
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: db-user
         - name: MYSQL_PASSWORD
-          value: VMWare123!
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: db-pass
         - name: MYSQL_ROOT_PASSWORD
-          value: id!0tb0x!123
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: db-root-pass
 
         volumeMounts:
         - name: mysql-volume
-          path: /var/lib/mysql     # you need to persist this path as mysql stores its data/logs here by default
+          mountPath: /var/lib/mysql     # you need to persist this path as mysql stores its data/logs here by default
       
       volumes:
       - name: mysql-volume          # this name should match volumeMounts.name
