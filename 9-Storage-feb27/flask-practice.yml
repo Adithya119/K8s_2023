@@ -1,0 +1,89 @@
+# flask & svc
+
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: flask-app
+  namespace: ccp-vra-prod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flask
+      env: prod
+  template:
+    metadata:
+      labels:
+        app: flask
+        env: prod
+        revision: 1
+    spec:
+      containers:
+      - name: flask-app
+        image: flask-private:1
+        ports:
+        - containerPort: 8080
+
+        env:                         # db_root_pass is not given to flask container(s) coz normal user is enough to push data into db. db-root-pass is only required while creating a db.
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: db-name
+        - name: MYSQL_USER
+          valueFrom:
+            secretkeyRef:
+              name: db-credentials
+              key: db-user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: db-pass
+        - name: MYSQL_SERVER       # app connects to db directly by calling it's svc-name.     # we give db to app as a direct connection by injecting db's svc-name as env.
+          value: mysqldb-svc 
+
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initiatlDelaySeconds: 5
+          periodSeconds: 15
+          failureThreshold: 3
+          timeoutSeconds: 2
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          periodSeconds: 10
+          failureThreshold: 3    
+
+        resources:
+          requests:
+            cpu: 4
+            mem: "16Gi"
+          limits:
+            cpu: 16
+            mem: "64Gi"
+
+---
+
+# svc
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-svc
+  namespace: ccp-vra-prod
+spec:
+  selector:
+    app: flask
+    env: prod
+  type: ClusterIP
+  ports:
+  - port: 8080    # service port --> keep this same as pods container port
+    targetPort: 8080
+    
+---

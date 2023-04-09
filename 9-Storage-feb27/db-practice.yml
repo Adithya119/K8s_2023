@@ -1,6 +1,6 @@
-# db's dont have http endpoint, they have tcp endpoint. Hence, for liveness & readiness probes, give tcpSocket instead of httpGet
+# A db blocks http traffic, they talk via TCP. Hence, for liveness & readiness probes, give tcpSocket instead of httpGet
 
-# pvc, rs & svc included here
+# pvc, db & svc included here
 ---
 
 apiVersion: v1
@@ -15,8 +15,8 @@ spec:
   resources:
     requests:
       storage: 5Gi
-    limits:          # might not be required as only 1 db pod can share the whole nfs exported path
-      storage: 10Gi
+    #limits:          # might not be required as only 1 db pod can share the whole nfs exported path
+      #storage: 10Gi
 
 ---
 
@@ -66,6 +66,24 @@ spec:
             secretKeyRef:
               name: db-credentials
               key: db-root-pass
+        
+        livenessProbe:
+          tcpSocket:
+            host:  # defaults to pod ip          # even though cluster IP for db pod is None, the db pod gets an ip
+            port: 3306
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+          timeoutSeconds: 3
+
+        readinessProbe:
+          tcpSocket:
+            host:  # defaults to pod ip
+            port: 3306
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+          timeoutSeconds: 3
 
         volumeMounts:
         - name: mysql-volume
@@ -92,7 +110,7 @@ spec:
     env: prod
   type: ClusterIP   # this is the default value
   ClusterIP: None    # always give "None" to any db svc so that the svc only exposes the db pod directly to some app 
-  ports:      # is this required when there is no ClusterIP in the 1st place ???
+  ports:      
   - port: 3306      # service port
 
 ---

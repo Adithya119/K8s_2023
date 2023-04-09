@@ -24,7 +24,7 @@ spec:
         ports:
         - containerPort: 8080
 
-        env:
+        env:                 # db_root_pass is not given to flask container(s) coz normal user is enough to push data into db. root-pass is only required while creating the db.
         - name: MYSQL_SERVER 
           value: mysql-svc     # gets access to db pods
         - name: MYSQL_DATABASE
