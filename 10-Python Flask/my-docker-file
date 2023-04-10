@@ -17,7 +17,6 @@ RUN pip install -r requirements.txt
 ENTRYPOINT ["python","app.py"]
 ---
 
-# ADD . flask/  ---> this command creates 'flask' dir inside the cont & copies all the contents of pwd ('StudentCoursesRestAPI') - 
-#   of the VM to inside the 'flask' dir of the cont.
+# ADD . flask/  ---> with this command, all the contents of pwd ('StudentCoursesRestAPI') of the VM are copied to 'flask' dir which is inside the image & will be inside the cont when run
 
 # for ADD command, <dest> dir should have a trailing slash.

@@ -1,0 +1,3 @@
+sudo su - jenkins
+docker image build -f Dockerfile -t studentcourserestservice:1.1 .
+docker container run -d --name flask11 -P studentcourserestservice:1.1
