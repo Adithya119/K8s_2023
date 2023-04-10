@@ -8,6 +8,12 @@ metadata:
   namespace: ccp-vra-prod
 spec:
   replicas: 3
+# minReadySeconds: 10       # real time this should be zero & it's the default value anyway
+  strategy:                # this strategy is also default
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
   selector:
     matchLabels:
       app: flask
@@ -19,6 +25,7 @@ spec:
         env: prod
         revision: 1
     spec:
+    # restartPolicy: Always      # this is default
       containers:
       - name: flask-app
         image: flask-private:1

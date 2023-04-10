@@ -7,7 +7,7 @@ metadata:
   namespace: prod      # deploying in prod namespace
 spec:
   replicas: 2
-  minReadySeconds: 10
+  minReadySeconds: 10    # real time this is zero
   strategy:                
     type: RollingUpdate
     rollingUpdate:

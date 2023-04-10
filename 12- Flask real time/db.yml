@@ -39,6 +39,8 @@ spec:
         db: mysql
         env: prod
     spec:
+      nodeSelector:
+        db: mysql     # give this as node label to the node of your choice
       containers:
       - name: mysql-db
         image: mysql-db-private:1
