@@ -9,3 +9,4 @@ sudo apt-get install -qy kubelet=1.22.3-00 kubectl=1.22.3-00 kubeadm=1.22.3-00
 sudo apt-mark hold kubelet kubeadm kubectl
 
 # intsalling k8s version 1.22.3-00
+# swapoff -a
