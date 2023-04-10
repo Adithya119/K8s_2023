@@ -7,6 +7,6 @@ echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/
 sudo apt-get update -q && \
 sudo apt-get install -qy kubelet=1.22.3-00 kubectl=1.22.3-00 kubeadm=1.22.3-00
 sudo apt-mark hold kubelet kubeadm kubectl
-
-# intsalling k8s version 1.22.3-00
 # swapoff -a
+
+# installing k8s version 1.22.3-00 because after 1.23, docker is not compatible for k8s as container runtime
