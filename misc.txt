@@ -1,0 +1,21 @@
+
+To prevent getting the following error:
+       [ERROR FileContent--proc-sys-net-bridge-bridge-nf-call-iptables]: /proc/sys/net/bridge/bridge-nf-call-iptables does not exist
+       [ERROR FileContent--proc-sys-net-ipv4-ip_forward]: /proc/sys/net/ipv4/ip_forward contents are not set to 1
+
+ sudo modprobe bridge
+ echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf
+ sudo sysctl -p /etc/sysctl.conf
+ sudo modprobe br_netfilter
+ sysctl -p /etc/sysctl.conf
+ echo 1 > /proc/sys/net/ipv4/ip_forward   # do this as sudo -i
+ cat /proc/sys/net/ipv4/ip_forward
+
+then do sudo -i && run "kubeadm init --pod-network-cidr=192.168.0.0/16"
+
+
+# note that with flannel overlay, I have seen errors & it's not working. Hence use Calico as yur overlay network:
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/tigera-operator.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/custom-resources.yaml
+
+# you can use "kubeadm reset" to restart the process of kubeadm init
