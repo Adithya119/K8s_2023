@@ -1,0 +1,18 @@
+1) docker image build -f Dockerfile -t <dockerfilename:tag> .                #  -t is to give the image a tag
+
+2) docker container run -d -P --name <name of the cont to be> <existing image name:tag>
+
+
+3) docker container rm -f b3919f354a09                                      # deleting a running cont
+
+---
+
+4) giving a new tag to existing image before pushing to docker hub registry:
+     docker image tag flask:1.0 adithya119/flask:1.1
+     docker login
+     docker push image adithya119/flask:1.1
+
+
+5) Get a shell to the running container:
+
+kubectl exec --stdin --tty shell-demo -- /bin/bash

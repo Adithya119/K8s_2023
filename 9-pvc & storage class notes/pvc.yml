@@ -6,11 +6,16 @@
 # this pvc persists data that's written into db by the app. It's not for logs.
 
 # k8s pod logs will be persisted to "logstash server" for our ops team for troubleshooting purpose using nfs storage class.
-# app data will be persisted to mysqldb for app team to look. App team may also use nfs storage class to provision PV on-demand.
+# ex:- /var/log/pods/ dir on the nodes contains kube-system's & workload pod's logs  --> logstash will filter these logs & send to - 
+# Kibana for admins to look/query.
+# this dir contains stdin & stderr logs of pods.
 
-#In a production cluster, you would not use hostPath. Instead a cluster administrator would provision a network resource like a - 
-# Google Compute Engine persistent disk, an NFS share, or an Amazon Elastic Block Store volume. Cluster administrators can also use - 
-# StorageClasses to set up dynamic provisioning.
+
+# app data will be persisted to mysqldb for app team to look. 
+
+# In a production cluster, you would not use hostPath. Instead a cluster administrator would provision a network resource like a - 
+# Google Compute Engine persistent disk, an NFS share, or an Amazon Elastic Block Store volume. 
+# Cluster administrators can also use StorageClasses to set up dynamic provisioning.
 
 
 ---
@@ -21,7 +26,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce   # refer other options written at the bottom
-  storageClassName: ccp-nfs-1     # defaults to gp2 in azure
+  storageClassName: ccp-nfs-1     
   resources:
     requests:     
       storage: 1Gi

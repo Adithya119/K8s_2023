@@ -1,0 +1,61 @@
+# flask deployment & svc
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flask
+      env: prod
+  template:
+    metadata:
+      labels:
+        app: flask
+        env: prod
+        revision: "1.1"    # docker hub already has "1.0"
+    spec:
+      containers:
+      - name: flask-app
+        image: adithya119/flask:1.1       # image will be pulled from docker hub acc
+        ports:
+        - containerPort: 8080
+
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: db-name
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: db-user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: db-pass
+        - name: MYSQL_SERVER      
+          value: mysql-svc        # linking flask app to db by calling db's LB name (db's svc name)
+---
+
+# svc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-app-svc
+spec:
+  selector:
+    app: flask
+    env: prod
+  type: NodePort      # realtime this is ClusterIP & for external communication, you would write an ingress file
+  ports:
+  - port: 8080      # service port
+    targetPort: 8080
+---

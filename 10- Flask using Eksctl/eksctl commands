@@ -1,6 +1,6 @@
 ----
 eksctl create cluster --name k8s-cluster --version 1.21 --region ap-south-1 --zones ap-south-1a,ap-south-1b,ap-south-1c\
---nodegroup-name ng-adi2111 --node-volume-size 10 --managed --node-ami-family 'Ubuntu2204'\
+--nodegroup-name ng-adi2111 --node-volume-size 10 --managed --node-ami-family 'Ubuntu2004'\
 --instance-types=t2.medium
 
     because       --node-volume-size ----> defaults to 80 Gi

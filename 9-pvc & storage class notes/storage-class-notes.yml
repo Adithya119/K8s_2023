@@ -1,4 +1,4 @@
-NFS storage class:-
+# NFS storage class:-
 # we created this storage class which is responsible for dynamically "provisioning" a PV on demand.
 # our storage class has a nfs provisioner that provides it's share for provisioning PVs for your k8s cluster.
 

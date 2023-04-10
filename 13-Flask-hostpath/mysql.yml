@@ -1,0 +1,74 @@
+# mysql rs and svc
+
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: mysql-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      db: mysql
+      env: prod
+  template:
+    metadata:
+      labels:
+        db: mysql
+        env: prod
+        version: "1"                      # error thrown for 1. Hence used "1"
+    spec:
+      containers:
+      - name: mysql-db
+        image: mysql:5.6    # this has no sec vuln
+        ports: 
+        - containerPort: 3306
+
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: db-name
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: db-user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: db-pass
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: db-root-pass
+        
+        volumeMounts:
+        - name: mysql-path
+          mountPath: "/var/lib/mysql"
+      
+      volumes:
+      - name: mysql-path
+        persistentVolumeClaim:
+          claimName: mysql-pvc
+---
+
+
+# svc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc    # this will be called by the flask app to access the db
+spec:
+  selector:
+    db: mysql
+    env: prod
+  clusterIP: None    # realtime it's None for db
+  ports:
+  - port: 3306
+    targetPort: 3306
+---

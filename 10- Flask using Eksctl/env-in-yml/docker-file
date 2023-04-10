@@ -1,10 +1,12 @@
 # env's defined in flask's deployment. Not here.
 
 ---
-FROM python:3.8-alpine3.15
+FROM python:3.8-alpine3.15     
 ADD . flask/
 EXPOSE 8080
 WORKDIR flask
 RUN pip install -r requirements.txt
 ENTRYPOINT ["python","app.py"]
 ---
+
+# base image required which has python with pip3 installed

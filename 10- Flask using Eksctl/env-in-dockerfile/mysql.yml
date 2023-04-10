@@ -79,11 +79,11 @@ metadata:
   name: mysql-pvc            # this is called by pod's spec.volumes for binding /var/lib/sql to the storage volume
                           # you can also give labels: db: mysql here for clarity
 spec:
+  accessModes:
+  - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
     limits:
       storage: 2Gi
-  accessModes:
-  - ReadWriteOnce
 ---

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+  labels:
+    pv: mysql      # we will call this later
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+  - ReadWriteMany
+  hostPath:
+    path: /data/app
+
+# pre-req: create a dir data/app on local host
+# mkdir -p data/app
+
+# permissions to data/app
