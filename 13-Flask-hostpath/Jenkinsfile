@@ -1,5 +1,7 @@
 pipeline {
-    agent k8s_master              /* running this on k8s_master, which is a slave to Jenkins */
+    agent { 
+        label 'k8s_master'      /* running this on k8s_master, which is a slave to Jenkins */
+        }              
     stages {
         
         stage('scm/git') {
