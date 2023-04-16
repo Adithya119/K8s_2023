@@ -1,0 +1,11 @@
+Refer "CCP_k8s" project in Jenkins UI
+
+Jenkins + K8s has been accomplished
+
+It contains 2 jobs inside it:-
+1. automation-ui-flask:
+    This job deploys flask app.
+    With this job, Jenkins Master runs the commands mentioned on "Jenkinsfile" on K8s_master (which has been added as a slave to jenkins).
+
+2. automation-ui-flask-delete:
+    This job deletes the flask app --> refer "Jenkinsfile-delete" for commands    
