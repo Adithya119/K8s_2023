@@ -23,8 +23,9 @@ pipeline {
                 kubectl apply -f mysql.yml
                 sleep 5s
                 kubectl apply -f flask.yml
-                sleep 180s
-                kubectl get pods'''
+                sleep 120s
+                kubectl get pods
+                kubectl get svc'''
             }
         }
     }
