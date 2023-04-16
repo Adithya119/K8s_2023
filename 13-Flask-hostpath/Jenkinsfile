@@ -11,7 +11,7 @@ pipeline {
         }
 
         stage('build') {
-            steps{
+            steps {
                 sh '''cd 13-Flask-hostpath/
                 ls
                 kubectl apply -f secrets.yml
