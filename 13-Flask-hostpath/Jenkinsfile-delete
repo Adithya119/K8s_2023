@@ -14,15 +14,15 @@ pipeline {
             steps {
                 sh '''cd 13-Flask-hostpath/
                 ls
-                kubectl delete -f secrets.yml
-                sleep 5s
-                kubectl delete -f pv.yml
-                sleep 5s
-                kubectl delete -f pvc.yml
+                kubectl delete -f flask.yml
                 sleep 5s
                 kubectl delete -f mysql.yml
                 sleep 5s
-                kubectl delete -f flask.yml
+                kubectl delete -f pvc.yml &    
+                sleep 5s
+                kubectl delete -f pv.yml &
+                sleep 5s
+                kubectl delete -f secrets.yml
                 sleep 5s
                 kubectl get deployments
                 sleep 2s
@@ -37,3 +37,6 @@ pipeline {
         }
     }
 }
+
+/* delete -f pv.yml and pvc.yml --> we are not getting back the terminal after running these 2 commands. Hence used & after those 2 - 
+commands so that they will be sent to bg & we can get our terminal back */
