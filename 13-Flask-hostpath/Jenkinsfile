@@ -1,0 +1,20 @@
+pipeline {
+    agent k8s_master              /* running this on k8s_master, which is a slave to Jenkins */
+    stages {
+        
+        stage('scm/git') {
+            steps {
+                git branch: 'master', changelog: false, poll: false, url: 'https://github.com/Adithya119/K8s_2023.git'
+            }
+        }
+
+        stage('build') {
+            steps{
+                sh '''cd 13-Flask-hostpath/
+                ls
+                kubectl apply -f secrets.yml
+                kubectl get secrets'''
+            }
+        }
+    }
+}
