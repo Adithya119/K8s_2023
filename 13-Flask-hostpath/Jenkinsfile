@@ -14,8 +14,17 @@ pipeline {
             steps {
                 sh '''cd 13-Flask-hostpath/
                 ls
-                kubectl delete -f secrets.yml
-                kubectl get secrets'''
+                kubectl apply -f secrets.yml
+                sleep 5s
+                kubectl apply -f pv.yml
+                sleep 10s
+                kubectl apply -f pvc.yml
+                sleep 10s
+                kubectl apply -f mysql.yml
+                sleep 5s
+                kubectl apply -f flask.yml
+                sleep 180s
+                kubectl get pods'''
             }
         }
     }
