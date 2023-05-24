@@ -27,7 +27,7 @@ spec:
                 operator: In
                 values:
                 - nginx
-            topologyKey: "kubernetes.io/hostname"
+            topologyKey: "kubernetes.io/hostname"   # toplogyKey is node label; app: nginx is pod label
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
