@@ -17,7 +17,7 @@ spec:
     spec:
       containers:                       # this is the spec of container within the pod
         - name: httpd
-          image: adithya119/httpd:v1    # -----> for rollouts, you can edit the image,  edit spec.template.metadata.labels.version,  spec.template.metadata.annotations & hit apply -f for a new rollout
+          image: adithya119/httpd:v1    # -----> for rollouts, you can edit the image,  edit spec.template.metadata.labels.version &  spec.template.metadata.annotations & hit apply -f for a new rollout
           ports:
             - containerPort: 80         # default port for http
 
