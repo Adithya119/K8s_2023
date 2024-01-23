@@ -51,7 +51,7 @@ spec:
         - name: MYSQL_DATABASE
           valueFrom:
             secretKeyRef:
-              name: db-credentials     # name of the referrant i.e, the name of the secret file.
+              name: db-credentials     # calling the secrets by it's metadata name
               key: db-name
         - name: MYSQL_USER
           valueFrom:
