@@ -8,7 +8,7 @@ spec:
     matchLabels:
       app: jenkins
       env: prod
-      version: "2.334"
+      #version: "2.334"   --> this is immutable, hence don't include the version at this level.
   template:                 # this is the pod template, under which metadata & pod spec fall ------ 2*
     metadata:
       labels:

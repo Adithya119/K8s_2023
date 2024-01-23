@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       app: jenkins
-      version: 1.651.2      # it should be "1.651.2" but it did not throw error this time.
+      #version: 1.651.2      # it should be "1.651.2" but it did not throw error this time.
   template:
     metadata:
       labels:            # metadata is wrt pod, not wrt container. That's why metadata & spec are given the same indentation.

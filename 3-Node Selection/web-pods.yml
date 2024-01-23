@@ -37,7 +37,7 @@ spec:
 
 # I've see that if you don't give replicas, k8s is assuming the desired pods is 1 even though I have 2 nodes.
 # Hence, I have 2 replicas
-# I have given 3 replicas & observed that the 3rd pod is not "running" because the anti-affinity rule was kicking in (only 1 pod per node)
+# I have given 3 replicas & observed that the 3rd pod is "not running" because the anti-affinity rule was kicking in (only 1 pod per node)
 
 # ex of "toplogyKey": node, az, region, etc. In this case, the scheduler must place the Pod on a node that has the label -
 # "kubernetes.io/hostname"
