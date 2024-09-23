@@ -68,6 +68,8 @@ spec:
               number: 80
 ---
 
+# if any traffic received on "vrach20.ch.xcloud.comcast.com/automation-ui", then route it to "automation-ui" service.
+
 # host: vrach20.ch.xcloud.comcast.com --> this is the app's DNS name. The app runs inside the pods on 3 nodes (1 pod per node). 
 # For upgrading the pods, we can do rolling updates.
 
