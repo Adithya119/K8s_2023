@@ -1,3 +1,5 @@
+# SC provides external storage (pv) on-demand
+
 apiVersion: v1
 kind: StorageClass
 metadata:
@@ -7,6 +9,3 @@ parameters:
   server: cre-logstash-kibana.com   # nfs server name
   path: /for-ccp-nfs-2      # path that is exported by nfs server for pv
   readOnly: "false"
-
-
-# SC provides external storage (pv) on-demand
