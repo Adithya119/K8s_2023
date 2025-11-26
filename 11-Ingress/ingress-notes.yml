@@ -1,5 +1,5 @@
 apiVersion: extensions/v1beta1
-kind: Ingress
+kind: Ingress                  # Ingress only talks to the Service, not to pods or nodes
 metadata:
   name: {serviceName}-devtools
   namespace: {namespace}
@@ -17,7 +17,7 @@ spec:
       paths:               # A collection of paths that map requests to backends.  (paths is an array)
       - backend:           # Backend defines the referenced (service) endpoint to which the traffic will be routed to.
           service:          # Service references a Service as a Backend. This is a mutually exclusive setting with "Resource"
-            name:          # {serviceName}. The service must exist in the same namespace as the Ingress object.  THIS IS HOW INGRESS IS CONNECTED TO THE SERVICE & HENCE TO THE PODS
+            name:          # {serviceName}. The service must exist in the same namespace as the Ingress object.  THIS IS HOW INGRESS IS CONNECTED TO THE SERVICE. Ingress only talks to the Service, not to pods or nodes
             port:          # {servicePort}. the port exposed by the service.
               number:      # Number is the numerical port number
         path:                   # Path is matched against the path of an incoming request. Paths must begin with a '/' and must be present when using PathType with value "Exact" or "Prefix".
